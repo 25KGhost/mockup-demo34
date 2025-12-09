@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>CHINO | NJ Luxury Real Estate</title>
+    <style>
+        /* --- 1. RESET & VARIABLES --- */
+        :root {
+            --bg-color: #f8f8f8;
+            --text-main: #111;
+            --text-muted: #555;
+            --accent-gold: #bfa473;
+            --accent-black: #050505;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Manrope', sans-serif;
+            --easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* --- 2. TYPOGRAPHY --- */
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 400;
+        }
+
+        /* --- 3. NAVIGATION (Desktop & Mobile) --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: background 0.3s ease, padding 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            font-weight: 600;
+            color: var(--text-main);
+            text-transform: uppercase;
+            z-index: 1002;
+            position: relative;
+        }
+
+        /* Desktop Links */
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover { opacity: 1; }
+
+        /* Mobile Menu Button */
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .bar {
+            width: 25px;
+            height: 2px;
+            background-color: var(--text-main);
+            transition: 0.3s ease;
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            transform: translateX(100%);
+            transition: transform 0.5s var(--easing);
+        }
+
+        .mobile-menu-overlay.active {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-overlay a {
+            color: #fff;
+            font-family: var(--font-display);
+            font-size: 2rem;
+            text-decoration: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.4s ease;
+        }
+
+        .mobile-menu-overlay.active a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- 4. HERO SECTION --- */
+        .hero {
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Dynamic viewport height for mobile browsers */
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6;
+            will-change: transform;
+        }
+
+        .hero-aura {
+            position: absolute;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(191, 164, 115, 0.4) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            filter: blur(60px);
+            animation: breathe 8s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: #fff;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .hero-pre {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 1s 0.5s forwards;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 7rem);
+            line-height: 1.1;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s 0.7s forwards var(--easing);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .hero-btns {
+            opacity: 0;
+            animation: fadeInUp 1s 1s forwards var(--easing);
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        /* Hover only on non-touch devices */
+        @media (hover: hover) {
+            .btn:hover { background: #fff; color: #000; border-color: #fff; }
+            .btn-primary:hover { background: var(--accent-gold); border-color: var(--accent-gold); color: #fff; }
+        }
+
+        /* --- 5. GLOBAL SECTIONS --- */
+        section {
+            padding: 8rem 5%;
+        }
+
+        .section-head {
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .section-label {
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        /* --- 6. LISTINGS --- */
+        .listing-grid {
+            display: grid;
+            /* Adaptive Grid: Fits even small mobile screens without overflow */
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            transition: transform 0.4s var(--easing);
+            will-change: transform;
+        }
+
+        .card-img-wrap {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s var(--easing);
+            will-change: transform;
+        }
+
+        @media (hover: hover) {
+            .card:hover { transform: translateY(-10px); }
+            .card:hover .card-img { transform: scale(1.05); }
+        }
+
+        .card-info { padding: 1.5rem 2rem; }
+
+        .card-price {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-meta {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-link {
+            color: var(--accent-black);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent-gold);
+            padding-bottom: 3px;
+        }
+
+        /* --- 7. ABOUT --- */
+        .about {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            background: #fff;
+        }
+
+        .about-text { flex: 1; }
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .about-img-wrap {
+            flex: 1;
+            position: relative;
+            height: 600px;
+            min-height: 400px;
+        }
+
+        .about-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: filter 0.5s ease;
+        }
+        
+        @media (hover: hover) {
+            .about-img:hover { filter: grayscale(0%); }
+        }
+
+        /* --- 8. STATS --- */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding: 4rem 5%;
+        }
+
+        .stat-box { text-align: center; width: 100%; }
+        .stat-box h3 {
+            font-size: 3rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+        .stat-box p {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- 9. NEIGHBORHOODS --- */
+        .guides { background: #111; color: #fff; }
+        .guide-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .guide-item {
+            position: relative;
+            height: 300px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-right: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-decoration: none;
+            color: #fff;
+        }
+        .guide-item:nth-child(2n) { border-right: none; }
+        
+        .guide-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.2;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+
+        @media (hover: hover) {
+            .guide-item:hover .guide-bg { opacity: 0.5; }
+        }
+
+        .guide-name {
+            z-index: 2;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        /* --- 10. CONTACT --- */
+        .contact {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f4f4f4;
+            overflow: hidden;
+            padding-bottom: 4rem; /* Safe area */
+        }
+
+        #dust-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; opacity: 0.5; pointer-events: none;
+        }
+
+        .contact-card {
+            position: relative;
+            z-index: 5;
+            background: #fff;
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 0;
+            border: none;
+            border-bottom: 1px solid #ddd;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+            background: transparent;
+            margin-bottom: 1.5rem;
+            border-radius: 0; /* Remove iOS roundness */
+        }
+
+        .form-input:focus { border-bottom-color: var(--accent-gold); }
+
+        footer {
+            background: #000;
+            color: #fff;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* --- RESPONSIVE / MOBILE PERFECT --- */
+        @media(max-width: 900px) {
+            .nav-links { display: none; }
+            .mobile-toggle { display: flex; }
+            
+            section { padding: 4rem 5%; }
+            
+            .about { flex-direction: column; gap: 3rem; }
+            .about-img-wrap { width: 100%; order: -1; height: 400px; }
+            
+            .guide-list { grid-template-columns: 1fr; }
+            .guide-item { border-right: none; }
+            
+            .stats { flex-direction: column; gap: 3rem; }
+        }
+
+        @media(max-width: 480px) {
+            .hero-title { font-size: 3.5rem; }
+            .hero-btns { flex-direction: column; width: 100%; }
+            .btn { width: 100%; text-align: center; }
+            
+            .contact-card { padding: 2rem; }
+            .section-title { font-size: 2.2rem; }
+            
+            /* Adjust Aura for small screens */
+            .hero-aura { width: 90vw; height: 90vw; opacity: 0.6; }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes breathe {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.6; }
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s var(--easing);
+            will-change: transform, opacity;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="logo">Chino.</div>
+        
+        <div class="nav-links">
+            <a href="#featured">Featured</a>
+            <a href="#about">Profile</a>
+            <a href="#guides">Neighborhoods</a>
+            <a href="#contact">Contact</a>
+        </div>
+
+        <div class="mobile-toggle" onclick="toggleMenu()">
+            <div class="bar" id="bar1"></div>
+            <div class="bar" id="bar2"></div>
+            <div class="bar" id="bar3"></div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <a href="#featured" onclick="toggleMenu()">Featured</a>
+        <a href="#about" onclick="toggleMenu()">Profile</a>
+        <a href="#guides" onclick="toggleMenu()">Neighborhoods</a>
+        <a href="#contact" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <div class="hero">
+        <div class="hero-bg" id="hero-bg"></div>
+        <div class="hero-aura"></div>
+        
+        <div class="hero-content">
+            <span class="hero-pre">New Jersey Real Estate</span>
+            <h1 class="hero-title">Live in<br>Rare Form</h1>
+            <div class="hero-btns">
+                <a href="#featured" class="btn btn-primary">View Collection</a>
+                <a href="#contact" class="btn">Get in Touch</a>
+            </div>
+        </div>
+    </div>
+
+    <section id="featured">
+        <div class="section-head scroll-reveal">
+            <span class="section-label">Selected Works</span>
+            <h2 class="section-title">The Current Collection</h2>
+        </div>
+
+        <div class="listing-grid">
+            <div class="card scroll-reveal">
+                <div class="card-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1600596542815-27b88e57e609?q=80&w=800&auto=format&fit=crop" loading="lazy" class="card-img" alt="Alpine Modern">
+                </div>
+                <div class="card-info">
+                    <div class="card-price">$4,250,000</div>
+                    <p class="card-meta">Alpine, NJ • 6 Bed • 7 Bath</p>
+                    <a href="#" class="card-link">View Details</a>
+                </div>
+            </div>
+
+            <div class="card scroll-reveal" style="transition-delay: 0.1s">
+                <div class="card-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=800&auto=format&fit=crop" loading="lazy" class="card-img" alt="Saddle River Estate">
+                </div>
+                <div class="card-info">
+                    <div class="card-price">$2,895,000</div>
+                    <p class="card-meta">Saddle River, NJ • 5 Bed • 4.5 Bath</p>
+                    <a href="#" class="card-link">View Details</a>
+                </div>
+            </div>
+
+            <div class="card scroll-reveal" style="transition-delay: 0.2s">
+                <div class="card-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop" loading="lazy" class="card-img" alt="Englewood Cliffs">
+                </div>
+                <div class="card-info">
+                    <div class="card-price">$1,750,000</div>
+                    <p class="card-meta">Englewood Cliffs, NJ • 4 Bed • 3 Bath</p>
+                    <a href="#" class="card-link">View Details</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="about-img-wrap scroll-reveal">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" loading="lazy" class="about-img" alt="Chino Realtor">
+        </div>
+        <div class="about-text scroll-reveal">
+            <span class="section-label">About Chino</span>
+            <h2 class="section-title" style="margin-bottom:2rem;">Precision & Perspective.</h2>
+            <p>
+                In a market saturated with noise, silence is a luxury. My approach to New Jersey real estate is built on data, discretion, and design.
+            </p>
+            <p>
+                Whether you are acquiring a multi-million dollar asset or liquidating a portfolio, I ensure the process is as refined as the property itself.
+            </p>
+            <a href="#contact" class="btn btn-primary" style="background:#111; color:#fff; border-color:#111;">Work With Me</a>
+        </div>
+    </section>
+
+    <div class="stats">
+        <div class="stat-box scroll-reveal">
+            <h3 id="count1">0</h3>
+            <p>Properties Sold</p>
+        </div>
+        <div class="stat-box scroll-reveal">
+            <h3 id="count2">0</h3>
+            <p>Total Volume (M)</p>
+        </div>
+        <div class="stat-box scroll-reveal">
+            <h3 id="count3">0</h3>
+            <p>Days on Market</p>
+        </div>
+    </div>
+
+    <section id="guides" class="guides">
+        <div class="section-head scroll-reveal" style="color:#fff">
+            <span class="section-label">Territory</span>
+            <h2 class="section-title" style="color:#fff">Area Guides</h2>
+        </div>
+        
+        <div class="guide-list">
+            <a href="#" class="guide-item scroll-reveal">
+                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop" class="guide-bg" alt="Bergen">
+                <span class="guide-name">Bergen County</span>
+            </a>
+            <a href="#" class="guide-item scroll-reveal">
+                <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=800&auto=format&fit=crop" class="guide-bg" alt="Essex">
+                <span class="guide-name">Essex County</span>
+            </a>
+            <a href="#" class="guide-item scroll-reveal">
+                <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?q=80&w=800&auto=format&fit=crop" class="guide-bg" alt="Hudson">
+                <span class="guide-name">Hudson Waterfront</span>
+            </a>
+            <a href="#" class="guide-item scroll-reveal">
+                <img src="https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?q=80&w=800&auto=format&fit=crop" class="guide-bg" alt="Morris">
+                <span class="guide-name">Morris County</span>
+            </a>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <canvas id="dust-canvas"></canvas>
+        <div class="contact-card scroll-reveal">
+            <span class="section-label">Acquisition</span>
+            <h2 class="section-title" style="margin-bottom:2rem; font-size:2.5rem;">Begin the Conversation</h2>
+            <form>
+                <input type="text" class="form-input" placeholder="Name">
+                <input type="email" class="form-input" placeholder="Email">
+                <input type="text" class="form-input" placeholder="Phone">
+                <button type="submit" class="btn btn-primary" style="width:100%; margin: 2rem 0 0 0;">Request Consultation</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2024 Chino Real Estate. Designed with Precision.
+    </footer>
+
+    <script>
+        // 1. MOBILE MENU TOGGLE
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const bars = document.querySelectorAll('.bar');
+            
+            menu.classList.toggle('active');
+            
+            // Animate Hamburger to X
+            if(menu.classList.contains('active')) {
+                bars[0].style.transform = "rotate(45deg) translate(5px, 6px)";
+                bars[1].style.opacity = "0";
+                bars[2].style.transform = "rotate(-45deg) translate(5px, -6px)";
+                bars.forEach(b => b.style.backgroundColor = "#fff"); // Change to white on black menu
+            } else {
+                bars[0].style.transform = "none";
+                bars[1].style.opacity = "1";
+                bars[2].style.transform = "none";
+                bars.forEach(b => b.style.backgroundColor = "var(--text-main)");
+            }
+        }
+
+        // 2. SCROLL REVEAL (Optimized)
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 3. NAV SCROLL EFFECT
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if(window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        }, { passive: true });
+
+        // 4. HERO PARALLAX (Desktop only to save mobile battery/jitters)
+        const heroBg = document.getElementById('hero-bg');
+        if(window.innerWidth > 768) {
+            window.addEventListener('scroll', () => {
+                const scrollPos = window.scrollY;
+                if(scrollPos < window.innerHeight) {
+                    heroBg.style.transform = `translateY(${scrollPos * 0.4}px)`;
+                }
+            }, { passive: true });
+        }
+
+        // 5. STATS ANIMATION
+        const statsSection = document.querySelector('.stats');
+        let statsAnimated = false;
+        const statObserver = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting && !statsAnimated) {
+                statsAnimated = true;
+                animateValue("count1", 0, 145, 2000);
+                animateValue("count2", 0, 320, 2000);
+                animateValue("count3", 0, 24, 2000);
+            }
+        });
+        statObserver.observe(statsSection);
+
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // 6. LIGHTWEIGHT PARTICLES
+        const canvas = document.getElementById('dust-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+        const particles = [];
+        const particleCount = window.innerWidth < 600 ? 15 : 35; // Fewer particles on mobile
+
+        function resize() {
+            const container = document.getElementById('contact');
+            w = canvas.width = container.offsetWidth;
+            h = canvas.height = container.offsetHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.size = Math.random() * 2;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if(this.x < 0) this.x = w;
+                if(this.x > w) this.x = 0;
+                if(this.y < 0) this.y = h;
+                if(this.y > h) this.y = 0;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0,0,0,0.1)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for(let i=0; i<particleCount; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, w, h);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        // Delay init to ensure container size is set
+        setTimeout(() => {
+            resize();
+            init();
+            animate();
+        }, 100);
+
+    </script>
+</body>
+</html>
